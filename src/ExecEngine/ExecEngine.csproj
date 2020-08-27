@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PackageId>ExecEngine</PackageId>
+    <Authors>agc93</Authors>
+    <Copyright>© Alistair Chapman 2020</Copyright>
+    <PackageTags>developengine;process;command;</PackageTags>
+    <RepositoryUrl>https://github.com/developengine/ExecEngine</RepositoryUrl>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/developengine/ExecEngine</PackageProjectUrl>
+  </PropertyGroup>
+
+</Project>

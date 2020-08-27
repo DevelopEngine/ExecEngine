@@ -1,0 +1,6 @@
+branches:
+  master:
+    mode: ContinuousDelivery
+    regex: ^master$|^main$
+    tag: alpha
+    increment: Minor
