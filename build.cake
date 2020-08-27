@@ -1,10 +1,9 @@
+#module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
 #load "build/helpers.cake"
 #load "build/version.cake"
+
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
-
-#module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
 #tool dotnet:?package=gpr&version=0.1.233
-
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS

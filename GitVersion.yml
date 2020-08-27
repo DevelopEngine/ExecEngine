@@ -1,3 +1,5 @@
 branches:
   develop:
     regex: ^master$|^main$
+  master:
+    regex: ^nothing$

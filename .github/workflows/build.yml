@@ -28,7 +28,7 @@ jobs:
       with:
         target: Release
         cake-bootstrap: true
-        # verbosity: Diagnostic
+        verbosity: Diagnostic
       env:
         NUGET_TOKEN: ${{secrets.NUGET_TOKEN}}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
