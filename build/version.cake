@@ -9,7 +9,8 @@ string BuildVersion(string fallbackVersion) {
         Information("Attempting GitVersion...");
         var versionInfo = GitVersion();
         PackageVersion = versionInfo.NuGetVersionV2;
-    } catch {
+    } catch (Exception ex) {
+        Warning($"Error when getting version {ex.Message}");
         Information($"Falling back to version: {fallbackVersion}");
         PackageVersion = fallbackVersion;
     } finally {
