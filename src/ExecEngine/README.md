@@ -1,0 +1,1 @@
+For anyone curious, this was extracted from [GPM](https://github.com/agc93/git-profile-manager) and is just reproduced here to cut down on duplication in my projects.
