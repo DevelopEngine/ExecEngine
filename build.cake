@@ -3,7 +3,7 @@
 #load "build/version.cake"
 
 #tool "nuget:https://api.nuget.org/v3/index.json?package=nuget.commandline&version=5.3.1"
-#tool dotnet:?package=gpr&version=0.1.233
+// #tool dotnet:?package=gpr&version=0.1.233
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -98,7 +98,7 @@ Task("NuGet")
         OutputDirectory = $"{artifacts}package",
         ArgumentCustomization = args => args
             .Append($"/p:Version=\"{packageVersion}\"")
-            .Append("/p:NoWarn=\"NU1701 NU1602\"")
+            .Append("/p:NoWarn=\"NU5105\"")
     };
     foreach(var project in projects.SourceProjectPaths) {
         Information($"Packing {project.GetDirectoryName()}...");
