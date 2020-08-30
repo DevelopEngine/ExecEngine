@@ -1,9 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 
 namespace ExecEngine
 {
+    public struct CommandOutput
+    {
+        public int ExitCode {get;set;}
+        public string Output {get;set;}
+    }
     public class CommandRunner : IDisposable
     {
         public void Dispose()
@@ -14,6 +21,8 @@ namespace ExecEngine
                 _process.Dispose();
             }
         }
+
+        public ProcessStartInfo StartInfo => _process?.StartInfo;
 
         public CommandRunner(string cmdName)
         {
@@ -31,15 +40,24 @@ namespace ExecEngine
             _process.StartInfo = processInfo;
         }
 
-        public (int, string) RunCommand(string args)
-        {
-            //args = args.StartsWith("git ") ? args : $"git {args}";
-            _process.StartInfo.Arguments = args;
+        public CommandRunner SetWorkingDirectory(string directoryPath) {
+            _process.StartInfo.WorkingDirectory = directoryPath;
+            return this;
+        }
+
+        public CommandOutput RunCommand(IEnumerable<string> args) {
+            var processArgs = args.Count() == 1
+                ? args.First()
+                : string.Join(" ", args);
+            _process.StartInfo.Arguments = processArgs;
             _process.Start();
             string output = _process.StandardOutput.ReadToEnd().Trim();
             //output = output + Environment.NewLine + _gitProcess.StandardError.ReadToEnd().Trim();
             _process.WaitForExit();
-            return (_process.ExitCode, output);
+            return new CommandOutput {ExitCode = _process.ExitCode, Output = output};
+        }
+        public CommandOutput RunCommand(params string[] args) {
+            return RunCommand(args.ToList());
         }
 
         private bool _disposed;
