@@ -10,6 +10,7 @@ namespace ExecEngine
     {
         public int ExitCode {get;set;}
         public string Output {get;set;}
+        public string ErrorOutput {get;set;}
     }
     public class CommandRunner : IDisposable
     {
@@ -30,7 +31,7 @@ namespace ExecEngine
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
-                //RedirectStandardError = true,
+                RedirectStandardError = true,
                 FileName = cmdName,
                 CreateNoWindow = true,
                 WorkingDirectory = Directory.GetCurrentDirectory()
@@ -52,9 +53,10 @@ namespace ExecEngine
             _process.StartInfo.Arguments = processArgs;
             _process.Start();
             string output = _process.StandardOutput.ReadToEnd().Trim();
+            string err = _process.StandardError.ReadToEnd().Trim();
             //output = output + Environment.NewLine + _gitProcess.StandardError.ReadToEnd().Trim();
             _process.WaitForExit();
-            return new CommandOutput {ExitCode = _process.ExitCode, Output = output};
+            return new CommandOutput {ExitCode = _process.ExitCode, Output = output, ErrorOutput = err};
         }
         public CommandOutput RunCommand(params string[] args) {
             return RunCommand(args.ToList());
