@@ -25,7 +25,7 @@ namespace ExecEngine
 
         public ProcessStartInfo StartInfo => _process?.StartInfo;
 
-        public CommandRunner(string cmdName)
+        public CommandRunner(string cmdName, params string[] defaultArgs)
         {
             var processInfo = new ProcessStartInfo
             {
@@ -39,6 +39,7 @@ namespace ExecEngine
 
             _process = new Process();
             _process.StartInfo = processInfo;
+            _baseArgs = defaultArgs?.ToList() ?? new List<string>();
         }
 
         public CommandRunner SetWorkingDirectory(string directoryPath) {
@@ -47,6 +48,11 @@ namespace ExecEngine
         }
 
         public CommandOutput RunCommand(IEnumerable<string> args) {
+            return RunDetached ? RunDetachedCommand(args) : RunAttachedCommand(args);
+        }
+
+        private CommandOutput RunAttachedCommand(IEnumerable<string> args) {
+            args = _baseArgs.Concat(args);
             var processArgs = args.Count() == 1
                 ? args.First()
                 : string.Join(" ", args);
@@ -58,12 +64,37 @@ namespace ExecEngine
             _process.WaitForExit();
             return new CommandOutput {ExitCode = _process.ExitCode, Output = output, ErrorOutput = err};
         }
+
+        private CommandOutput RunDetachedCommand(IEnumerable<string> args) {
+            args = _baseArgs.Concat(args);
+            var processArgs = args.Count() == 1
+                ? args.First()
+                : string.Join(" ", args);
+            _process.StartInfo.Arguments = processArgs;
+            _process.StartInfo.UseShellExecute = true;
+            _process.StartInfo.RedirectStandardOutput = false;
+            _process.StartInfo.RedirectStandardError = false;
+            _process.StartInfo.CreateNoWindow = true;
+            _process.Start();
+            _process.WaitForExit();
+            return new CommandOutput {ExitCode = _process.ExitCode, Output = null, ErrorOutput = null};
+        }
+
         public CommandOutput RunCommand(params string[] args) {
             return RunCommand(args.ToList());
         }
 
+        /// <summary>
+        /// An optional name for this runner.
+        /// </summary>
+        /// <remarks>Not used or parsed anywhere. Use this for internal purposes.</remarks>
+        /// <value>The name of the runner.</value>
+        public string Name {get;set;}
+
         private bool _disposed;
         private readonly Process _process;
+        private readonly List<string> _baseArgs;
 
+        public bool RunDetached {get;set;} = false;
     }
 }
