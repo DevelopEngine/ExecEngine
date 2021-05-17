@@ -1,4 +1,3 @@
-#module nuget:?package=Cake.DotNetTool.Module&version=0.4.0
 #load "build/helpers.cake"
 #load "build/version.cake"
 
@@ -142,6 +141,7 @@ Task("Publish-GitHub-Package")
 .IsDependentOn("NuGet")
 .WithCriteria(() => HasEnvironmentVariable("GITHUB_REF"))
 .WithCriteria(() => EnvironmentVariable("GITHUB_REF").StartsWith("refs/tags/v"))
+.ContinueOnError()
 .Does(() => {
     // Publish to GitHub Packages
     var exitCode = 0;
